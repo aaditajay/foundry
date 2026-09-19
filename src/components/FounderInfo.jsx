@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useApp } from '../context/AppContext';
-import { ArrowRight, Mic, MicOff, Paperclip, X, FileText, Copy, Check, Sparkles } from 'lucide-react';
+import { ArrowRight, Mic, MicOff, Paperclip, X, FileText, Copy, Check } from 'lucide-react';
 
 export const FounderInfo = () => {
   const { user, founderInfo, handleSaveFounderInfo } = useApp();
@@ -24,16 +24,49 @@ export const FounderInfo = () => {
 
   const displayName = name ? name.split(' ')[0] : "Founder";
 
-  const aiPromptText = `Act as a senior startup strategy advisor and co-founder. I am going to share my startup idea and company details.
+  const aiPromptText = `I want you to help me create a structured profile of my existing company.
 
-Please answer these 5 core questions to structure my company profile for Foundry AI:
-1. What is the core problem your company solves and for whom?
-2. What is your unique value proposition & competitive advantage?
-3. What is your current business model & revenue generation strategy?
-4. Who are your primary target market segments & customer personas?
-5. What is your 6-month MVP roadmap and key unit economics target?
+Ask me questions one at a time. Do not make assumptions. If my answer is unclear, ask a follow-up question.
 
-Provide a concise, comprehensive breakdown of our company profile so I can paste the result back into Foundry.`;
+Understand these areas:
+
+1. Company name
+2. Industry
+3. What the company does
+4. Main products/services
+5. Target customers
+6. Current geographic/market presence
+7. Business model
+8. Pricing/revenue model
+9. Current scale (customers, users, locations, revenue, etc., if I know them)
+10. Main strengths
+11. Current challenges
+12. Current business goals
+13. Important technical/operational constraints
+14. Important competitors or alternatives
+15. Anything else that would help evaluate future business decisions
+
+Once you have enough information, DO NOT give me a long explanation.
+
+Return only a structured company profile using exactly this format:
+
+Company Name:
+Industry:
+What We Do:
+Target Customers:
+Main Products/Services:
+Market/Geographic Presence:
+Business Model:
+Pricing/Revenue Model:
+Current Scale:
+Main Strengths:
+Current Challenges:
+Current Goals:
+Important Constraints:
+Competitors/Alternatives:
+Additional Context:
+
+Use concise, factual statements based only on my answers.`;
 
   const copyPromptToClipboard = () => {
     navigator.clipboard.writeText(aiPromptText);
@@ -41,7 +74,7 @@ Provide a concise, comprehensive breakdown of our company profile so I can paste
     setTimeout(() => setCopied(false), 2200);
   };
 
-  // Voice to Text handler with Fix #3 (interimResults = false & isFinal check)
+  // Voice to Text handler with interimResults = false & isFinal check
   const toggleVoiceToText = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -58,7 +91,7 @@ Provide a concise, comprehensive breakdown of our company profile so I can paste
       try {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
-        recognition.interimResults = false; // Fix: prevent duplicate interim results
+        recognition.interimResults = false;
         recognition.lang = 'en-US';
 
         recognition.onstart = () => setIsRecording(true);
@@ -340,18 +373,18 @@ Provide a concise, comprehensive breakdown of our company profile so I can paste
         Founder Profile
       </div>
 
-      {/* PROMPT MODAL DIALOG BOX */}
+      {/* PROMPT MODAL DIALOG BOX (PERFECTLY DEAD-CENTER ALIGNED) */}
       {showPromptModal && (
         <div 
           style={{
             position: 'fixed',
             inset: 0,
             backgroundColor: 'rgba(0, 0, 0, 0.65)',
-            backdropFilter: 'blur(4px)',
+            backdropFilter: 'blur(6px)',
             display: 'flex',
             alignItems: 'center',
             justify: 'center',
-            zIndex: 1000,
+            zIndex: 99999,
             padding: '24px'
           }}
           onClick={() => setShowPromptModal(false)}
@@ -360,18 +393,19 @@ Provide a concise, comprehensive breakdown of our company profile so I can paste
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '24px',
-              maxWidth: '620px',
+              maxWidth: '680px',
               width: '100%',
               padding: '32px',
-              boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
               position: 'relative',
-              animation: 'fadeIn 0.25s ease'
+              animation: 'fadeIn 0.25s ease',
+              margin: 'auto'
             }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-              <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#111111', lineHeight: '1.4', paddingRight: '20px' }}>
+              <h3 style={{ fontSize: '19px', fontWeight: '800', color: '#111111', lineHeight: '1.4', paddingRight: '20px' }}>
                 Paste this onto any agent you use and answer the questions and paste the result
               </h3>
               <button 
@@ -395,7 +429,7 @@ Provide a concise, comprehensive breakdown of our company profile so I can paste
                 lineHeight: '1.6',
                 color: '#1e293b',
                 whiteSpace: 'pre-wrap',
-                maxHeight: '320px',
+                maxHeight: '340px',
                 overflowY: 'auto',
                 marginBottom: '24px'
               }}

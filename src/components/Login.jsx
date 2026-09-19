@@ -19,7 +19,6 @@ export const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Mock email authentication
     setTimeout(() => {
       const nameFromEmail = email.split('@')[0] || "Founder";
       setUser({
@@ -41,12 +40,12 @@ export const Login = () => {
 
   return (
     <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between', padding: '40px 64px' }}>
-      {/* Top Greeting matching Reference Image */}
+      {/* Top Greeting */}
       <div className="greeting-header">
         Hello <strong>Founder</strong>,
       </div>
 
-      {/* Center Card Box matching Reference Image */}
+      {/* Center Card Box */}
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', margin: 'auto 0' }}>
         <div 
           style={{
@@ -54,7 +53,7 @@ export const Login = () => {
             borderRadius: '28px',
             padding: '36px 36px 32px 36px',
             width: '100%',
-            maxWidth: '420px',
+            maxWidth: '440px',
             boxShadow: '0 16px 40px rgba(0,0,0,0.06)',
             border: '1px solid #f0f0f0',
             display: 'flex',
@@ -183,7 +182,7 @@ export const Login = () => {
                 fontSize: '15px',
                 fontWeight: '700',
                 cursor: 'pointer',
-                marginTop: '10px',
+                marginTop: '8px',
                 boxShadow: '0 4px 12px rgba(15,23,42,0.15)',
                 transition: 'all 0.2s ease'
               }}
@@ -192,16 +191,16 @@ export const Login = () => {
             </button>
           </form>
 
-          {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', width: '100%', margin: '22px 0 18px 0' }}>
-            <div style={{ flex: 1, height: '1px', backgroundColor: '#e2e8f0', borderStyle: 'dashed' }} />
-            <span style={{ fontSize: '11px', color: '#94a3b8', padding: '0 12px', fontWeight: '500' }}>
+          {/* Clean Solid Divider Line (Fixed ugly dashed boxes) */}
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%', margin: '22px 0' }}>
+            <div style={{ flex: 1, height: '1px', backgroundColor: '#e2e8f0' }} />
+            <span style={{ fontSize: '12px', color: '#64748b', padding: '0 14px', fontWeight: '500', whiteSpace: 'nowrap' }}>
               Or sign in with
             </span>
-            <div style={{ flex: 1, height: '1px', backgroundColor: '#e2e8f0', borderStyle: 'dashed' }} />
+            <div style={{ flex: 1, height: '1px', backgroundColor: '#e2e8f0' }} />
           </div>
 
-          {/* Google Button matching Reference Image */}
+          {/* Lengthier Google Sign In Button with Icon & Text */}
           <button
             type="button"
             onClick={onGoogleClick}
@@ -210,13 +209,18 @@ export const Login = () => {
               display: 'flex',
               alignItems: 'center',
               justify: 'center',
-              width: '80px',
-              height: '44px',
+              gap: '12px',
+              width: '100%',
               backgroundColor: '#ffffff',
               border: '1px solid #cbd5e1',
-              borderRadius: '12px',
+              borderRadius: '14px',
+              padding: '12px 20px',
+              fontSize: '14px',
+              fontWeight: '600',
+              color: '#0f172a',
               cursor: 'pointer',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
             }}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
@@ -239,6 +243,7 @@ export const Login = () => {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
               />
             </svg>
+            <span>Sign in with Google</span>
           </button>
         </div>
       </div>
