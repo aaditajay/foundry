@@ -29,27 +29,26 @@ export const Splash = () => {
       }}
       className="animate-fade-in"
     >
-      {/* Centered Emblem matching Reference Screen 1 */}
-      <div style={{ transform: 'scale(1.4)', marginBottom: '40px' }}>
-        <FoundryLogo color="#FFFFFF" className="w-24 h-28" />
+      {/* Centered Logo matching Reference Image 1 */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '80px' }}>
+        <FoundryLogo color="#FFFFFF" className="w-28 h-36" />
       </div>
 
-      {/* Minimal progress line treatment matching Reference Screen 1 */}
-      <div style={{ width: '280px', position: 'relative', marginTop: '40px' }}>
-        {/* Base Gray Line */}
-        <div style={{ height: '1px', backgroundColor: '#333333', width: '100%', position: 'relative' }}>
-          {/* Left Endpoint Dot */}
+      {/* Line with dots at both ends matching exact reference image 1 */}
+      <div style={{ position: 'absolute', bottom: '120px', width: '560px', maxWidth: '80%' }}>
+        <div style={{ height: '1px', backgroundColor: '#555555', position: 'relative', width: '100%' }}>
+          {/* Left Dot */}
           <div style={{
             position: 'absolute',
             left: '0',
-            top: '-3px',
-            width: '7px',
-            height: '7px',
+            top: '-3.5px',
+            width: '8px',
+            height: '8px',
             borderRadius: '50%',
-            backgroundColor: '#888888'
+            backgroundColor: '#ffffff'
           }} />
 
-          {/* Animated White Progress Line */}
+          {/* Progress bar animation */}
           <div 
             style={{ 
               height: '1px', 
@@ -60,16 +59,15 @@ export const Splash = () => {
             }} 
           />
 
-          {/* Right Endpoint Dot */}
+          {/* Right Dot */}
           <div style={{
             position: 'absolute',
             right: '0',
-            top: '-3px',
-            width: '7px',
-            height: '7px',
+            top: '-3.5px',
+            width: '8px',
+            height: '8px',
             borderRadius: '50%',
-            backgroundColor: '#ffffff',
-            boxShadow: '0 0 8px #ffffff'
+            backgroundColor: '#ffffff'
           }} />
         </div>
       </div>
