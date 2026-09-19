@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useApp } from '../context/AppContext';
-import { ArrowRight, Mic, MicOff, Paperclip, X, FileText } from 'lucide-react';
+import { ArrowRight, Mic, MicOff, Paperclip, X, FileText, Copy, Check, Sparkles } from 'lucide-react';
 
 export const FounderInfo = () => {
   const { user, founderInfo, handleSaveFounderInfo } = useApp();
@@ -18,9 +18,30 @@ export const FounderInfo = () => {
   const [attachedFile, setAttachedFile] = useState(null);
   const fileInputRef = useRef(null);
 
+  // Prompt Modal state
+  const [showPromptModal, setShowPromptModal] = useState(false);
+  const [copied, setCopied] = useState(false);
+
   const displayName = name ? name.split(' ')[0] : "Founder";
 
-  // Voice to Text handler
+  const aiPromptText = `Act as a senior startup strategy advisor and co-founder. I am going to share my startup idea and company details.
+
+Please answer these 5 core questions to structure my company profile for Foundry AI:
+1. What is the core problem your company solves and for whom?
+2. What is your unique value proposition & competitive advantage?
+3. What is your current business model & revenue generation strategy?
+4. Who are your primary target market segments & customer personas?
+5. What is your 6-month MVP roadmap and key unit economics target?
+
+Provide a concise, comprehensive breakdown of our company profile so I can paste the result back into Foundry.`;
+
+  const copyPromptToClipboard = () => {
+    navigator.clipboard.writeText(aiPromptText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2200);
+  };
+
+  // Voice to Text handler with Fix #3 (interimResults = false & isFinal check)
   const toggleVoiceToText = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -37,17 +58,22 @@ export const FounderInfo = () => {
       try {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
-        recognition.interimResults = true;
+        recognition.interimResults = false; // Fix: prevent duplicate interim results
         recognition.lang = 'en-US';
 
         recognition.onstart = () => setIsRecording(true);
 
         recognition.onresult = (event) => {
-          let currentTranscript = '';
+          let finalChunk = '';
           for (let i = event.resultIndex; i < event.results.length; i++) {
-            currentTranscript += event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalChunk += event.results[i][0].transcript;
+            }
           }
-          setAboutCompany(prev => (prev ? prev + ' ' : '') + currentTranscript);
+          const cleanText = finalChunk.trim();
+          if (cleanText) {
+            setAboutCompany(prev => (prev ? prev + ' ' : '') + cleanText);
+          }
         };
 
         recognition.onerror = (err) => {
@@ -80,10 +106,9 @@ export const FounderInfo = () => {
         content: content
       });
 
-      // Append snippet to textarea
       if (typeof content === 'string') {
         const snippet = content.substring(0, 300);
-        setAboutCompany(prev => prev + `\n[Attached File "${file.name}": ${snippet}...]`);
+        setAboutCompany(prev => (prev ? prev + '\n' : '') + `[Attached File "${file.name}": ${snippet}...]`);
       }
     };
 
@@ -95,7 +120,7 @@ export const FounderInfo = () => {
         size: (file.size / 1024).toFixed(1) + ' KB',
         content: `[Attached Document: ${file.name}]`
       });
-      setAboutCompany(prev => prev + `\n[Attached File: ${file.name}]`);
+      setAboutCompany(prev => (prev ? prev + '\n' : '') + `[Attached File: ${file.name}]`);
     }
   };
 
@@ -117,28 +142,45 @@ export const FounderInfo = () => {
 
   return (
     <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between', paddingBottom: '32px' }}>
-      {/* Top Greeting matching Reference Image 2 */}
+      {/* Top Greeting */}
       <div className="greeting-header">
         Hello <strong>{displayName}</strong>,
       </div>
 
-      {/* Main Content Container matching Reference Image 2 */}
+      {/* Main Content Container */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '720px', margin: '0 auto' }}>
         
-        {/* Title & Subtitle matching Reference Image 2 */}
+        {/* Title */}
         <h1 className="page-title" style={{ fontSize: '42px', fontWeight: '800', marginBottom: '8px', letterSpacing: '-1px' }}>
           Tell Us About Your Company.
         </h1>
 
+        {/* Subtitle with Hypertext Prompt Modal Trigger */}
         <div style={{ textAlign: 'center', color: '#444444', fontSize: '15px', lineHeight: '1.5', marginBottom: '28px', maxWidth: '600px' }}>
           <p>Take some time, talk to us about what you own. Not the deep files, but your market, people, business, ...</p>
           <p style={{ marginTop: '6px', fontWeight: '800', color: '#111111' }}>Or</p>
-          <p style={{ fontWeight: '800', color: '#111111' }}>Use this prompt and paste the result</p>
+          <button
+            type="button"
+            onClick={() => setShowPromptModal(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontWeight: '800',
+              color: '#111111',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              fontSize: '15px',
+              fontFamily: 'inherit',
+              padding: 0
+            }}
+          >
+            Use this prompt and paste the result
+          </button>
         </div>
 
         <form onSubmit={handleNext} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '18px' }}>
           
-          {/* Your Name Input matching Reference Image 2 */}
+          {/* Your Name Input */}
           <div style={{ backgroundColor: '#e6e6e6', borderRadius: '18px', padding: '16px 24px' }}>
             <span style={{ fontSize: '13px', color: '#666666', display: 'block', marginBottom: '4px' }}>Your Name</span>
             <input 
@@ -151,7 +193,7 @@ export const FounderInfo = () => {
             />
           </div>
 
-          {/* About Your Company Container with Voice (🎤) & Attachment (📎) Icons matching Reference Image 2 */}
+          {/* About Your Company Container */}
           <div 
             style={{ 
               backgroundColor: '#e6e6e6', 
@@ -169,7 +211,7 @@ export const FounderInfo = () => {
                 About Your Company
               </span>
 
-              {/* Voice to Text Microphone Icon Button (Top Right) */}
+              {/* Voice Microphone Icon (Top Right) */}
               <button
                 type="button"
                 onClick={toggleVoiceToText}
@@ -212,7 +254,7 @@ export const FounderInfo = () => {
               }}
             />
 
-            {/* Attached File Badge preview if present */}
+            {/* Attached File Badge preview */}
             {attachedFile && (
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#ffffff', padding: '6px 12px', borderRadius: '100px', fontSize: '13px', width: 'fit-content', marginBottom: '8px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                 <FileText size={14} style={{ color: '#111111' }} />
@@ -224,7 +266,7 @@ export const FounderInfo = () => {
               </div>
             )}
 
-            {/* Bottom Row: File Upload Attachment Paperclip Icon (Bottom Right) */}
+            {/* Attachment Paperclip Icon (Bottom Right) */}
             <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', position: 'absolute', bottom: '16px', right: '20px' }}>
               <input
                 type="file"
@@ -257,7 +299,7 @@ export const FounderInfo = () => {
             </div>
           </div>
 
-          {/* Role & Stage fields matching Reference Image 2 */}
+          {/* Role & Stage fields */}
           <div style={{ display: 'flex', gap: '18px', width: '100%' }}>
             <div style={{ flex: 1, backgroundColor: '#e6e6e6', borderRadius: '18px', padding: '16px 24px' }}>
               <span style={{ fontSize: '13px', color: '#666666', display: 'block', marginBottom: '4px' }}>Your Role</span>
@@ -297,6 +339,96 @@ export const FounderInfo = () => {
       <div style={{ textAlign: 'center', color: '#888888', fontSize: '13px', paddingBottom: '8px' }}>
         Founder Profile
       </div>
+
+      {/* PROMPT MODAL DIALOG BOX */}
+      {showPromptModal && (
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.65)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'center',
+            zIndex: 1000,
+            padding: '24px'
+          }}
+          onClick={() => setShowPromptModal(false)}
+        >
+          <div 
+            style={{
+              backgroundColor: '#ffffff',
+              borderRadius: '24px',
+              maxWidth: '620px',
+              width: '100%',
+              padding: '32px',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
+              position: 'relative',
+              animation: 'fadeIn 0.25s ease'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#111111', lineHeight: '1.4', paddingRight: '20px' }}>
+                Paste this onto any agent you use and answer the questions and paste the result
+              </h3>
+              <button 
+                type="button"
+                onClick={() => setShowPromptModal(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666666', padding: '4px' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Prompt Content */}
+            <div 
+              style={{ 
+                backgroundColor: '#f8fafc', 
+                border: '1px solid #e2e8f0', 
+                borderRadius: '16px', 
+                padding: '20px',
+                fontFamily: 'monospace',
+                fontSize: '13px',
+                lineHeight: '1.6',
+                color: '#1e293b',
+                whiteSpace: 'pre-wrap',
+                maxHeight: '320px',
+                overflowY: 'auto',
+                marginBottom: '24px'
+              }}
+            >
+              {aiPromptText}
+            </div>
+
+            {/* Modal Actions */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              {copied ? (
+                <span style={{ fontSize: '13px', color: '#10b981', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Check size={16} /> Copied to clipboard!
+                </span>
+              ) : (
+                <span style={{ fontSize: '12px', color: '#64748b' }}>
+                  Copy & paste into ChatGPT, Claude, or any AI assistant.
+                </span>
+              )}
+
+              <button
+                type="button"
+                onClick={copyPromptToClipboard}
+                className="btn-primary"
+                style={{ padding: '12px 24px', fontSize: '14px', borderRadius: '12px' }}
+              >
+                {copied ? <Check size={16} /> : <Copy size={16} />}
+                <span>{copied ? "Copied!" : "Copy to Clipboard"}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

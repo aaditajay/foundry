@@ -29,7 +29,7 @@ export const NewIdea = () => {
   const [attachedFile, setAttachedFile] = useState(null);
   const fileInputRef = useRef(null);
 
-  // Voice to Text handler
+  // Voice to Text handler with Fix #3 (interimResults = false & isFinal check)
   const toggleVoiceToText = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -46,17 +46,22 @@ export const NewIdea = () => {
       try {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
-        recognition.interimResults = true;
+        recognition.interimResults = false; // Fix: prevent duplicate interim results
         recognition.lang = 'en-US';
 
         recognition.onstart = () => setIsRecording(true);
 
         recognition.onresult = (event) => {
-          let currentTranscript = '';
+          let finalChunk = '';
           for (let i = event.resultIndex; i < event.results.length; i++) {
-            currentTranscript += event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalChunk += event.results[i][0].transcript;
+            }
           }
-          setIdeaInput(prev => (prev ? prev + ' ' : '') + currentTranscript);
+          const cleanText = finalChunk.trim();
+          if (cleanText) {
+            setIdeaInput(prev => (prev ? prev + ' ' : '') + cleanText);
+          }
         };
 
         recognition.onerror = (err) => {
@@ -91,7 +96,7 @@ export const NewIdea = () => {
 
       if (typeof content === 'string') {
         const snippet = content.substring(0, 300);
-        setIdeaInput(prev => prev + `\n[Attached File "${file.name}": ${snippet}...]`);
+        setIdeaInput(prev => (prev ? prev + '\n' : '') + `[Attached File "${file.name}": ${snippet}...]`);
       }
     };
 
@@ -103,7 +108,7 @@ export const NewIdea = () => {
         size: (file.size / 1024).toFixed(1) + ' KB',
         content: `[Attached Document: ${file.name}]`
       });
-      setIdeaInput(prev => prev + `\n[Attached File: ${file.name}]`);
+      setIdeaInput(prev => (prev ? prev + '\n' : '') + `[Attached File: ${file.name}]`);
     }
   };
 
@@ -119,12 +124,12 @@ export const NewIdea = () => {
 
   return (
     <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between', paddingBottom: '32px' }}>
-      {/* Top Greeting showing registered founder's name matching Reference Image 1 */}
+      {/* Top Greeting */}
       <div className="greeting-header">
         Hello <strong>{userName}</strong>,
       </div>
 
-      {/* Main Idea Form matching Reference Image 1 */}
+      {/* Main Idea Form */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '720px', margin: '0 auto' }}>
         
         <h1 className="page-title" style={{ fontSize: '38px', fontWeight: '800', marginBottom: '28px', letterSpacing: '-1px' }}>
@@ -133,7 +138,7 @@ export const NewIdea = () => {
 
         <form onSubmit={onSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '18px' }}>
           
-          {/* Large Main Box: "Describe your idea." with 🎤 top-right & 📎 bottom-right matching Reference Image 1 */}
+          {/* Large Main Box with Top Right 🎤 & Bottom Right 📎 Icons */}
           <div 
             style={{ 
               backgroundColor: '#e6e6e6', 
@@ -146,40 +151,33 @@ export const NewIdea = () => {
               justify: 'space-between'
             }}
           >
-            {/* Top Row: Placeholder & Voice Mic Icon (Top Right) */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%' }}>
-              <span style={{ fontSize: '18px', color: ideaInput ? 'transparent' : '#333333', pointerEvents: 'none', position: 'absolute' }}>
-                Describe your idea.
-              </span>
+            {/* Voice Microphone Icon (Top Right) */}
+            <button
+              type="button"
+              onClick={toggleVoiceToText}
+              title={isRecording ? "Stop voice recording" : "Click to speak (Voice to text)"}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '18px',
+                background: isRecording ? '#ef4444' : 'transparent',
+                color: isRecording ? '#ffffff' : '#333333',
+                border: 'none',
+                borderRadius: '50%',
+                padding: '8px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justify: 'center',
+                transition: 'all 0.2s ease',
+                animation: isRecording ? 'pulseGlow 1.5s infinite' : 'none',
+                zIndex: 2
+              }}
+            >
+              {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
+            </button>
 
-              {/* Voice to Text Microphone Icon Button (Top Right) */}
-              <button
-                type="button"
-                onClick={toggleVoiceToText}
-                title={isRecording ? "Stop voice recording" : "Click to speak (Voice to text)"}
-                style={{
-                  position: 'absolute',
-                  top: '16px',
-                  right: '18px',
-                  background: isRecording ? '#ef4444' : 'transparent',
-                  color: isRecording ? '#ffffff' : '#333333',
-                  border: 'none',
-                  borderRadius: '50%',
-                  padding: '8px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justify: 'center',
-                  transition: 'all 0.2s ease',
-                  animation: isRecording ? 'pulseGlow 1.5s infinite' : 'none',
-                  zIndex: 2
-                }}
-              >
-                {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
-              </button>
-            </div>
-
-            {/* Textarea */}
+            {/* Native Textarea with Placeholder (Fixed Fix #4: No overlapping text) */}
             <textarea
               placeholder="Describe your idea."
               value={ideaInput}
@@ -202,7 +200,7 @@ export const NewIdea = () => {
               autoFocus
             />
 
-            {/* Attached File Badge preview if present */}
+            {/* Attached File Badge preview */}
             {attachedFile && (
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#ffffff', padding: '6px 12px', borderRadius: '100px', fontSize: '13px', width: 'fit-content', marginBottom: '8px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                 <FileText size={14} style={{ color: '#111111' }} />
@@ -214,7 +212,7 @@ export const NewIdea = () => {
               </div>
             )}
 
-            {/* Bottom Row: File Upload Attachment Paperclip Icon (Bottom Right) */}
+            {/* Paperclip Icon (Bottom Right) */}
             <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', position: 'absolute', bottom: '16px', right: '18px' }}>
               <input
                 type="file"
@@ -248,7 +246,7 @@ export const NewIdea = () => {
 
           </div>
 
-          {/* Two Side-by-Side Boxes: "Location" & "Budget(If Needed)" matching Reference Image 1 */}
+          {/* Two Side-by-Side Boxes: "Location" & "Budget(If Needed)" */}
           <div style={{ display: 'flex', gap: '18px' }}>
             <div style={{ flex: 1, backgroundColor: '#e6e6e6', borderRadius: '18px', padding: '18px 24px' }}>
               <input
@@ -287,7 +285,7 @@ export const NewIdea = () => {
             </div>
           </div>
 
-          {/* Bottom Box: "Anything else to know about" matching Reference Image 1 */}
+          {/* Bottom Box: "Anything else to know about" */}
           <div style={{ backgroundColor: '#e6e6e6', borderRadius: '18px', padding: '18px 24px' }}>
             <input
               type="text"
