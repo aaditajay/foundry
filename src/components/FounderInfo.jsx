@@ -1,80 +1,102 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { ArrowRight } from 'lucide-react';
 
 export const FounderInfo = () => {
-  const { user, founderInfo, setFounderInfo, navigate } = useApp();
+  const { user, founderInfo, handleSaveFounderInfo } = useApp();
 
-  const userName = user?.name ? user.name.split(' ')[0] : "Founder";
+  const [name, setName] = useState(user?.name || founderInfo?.name || "");
+  const [industry, setIndustry] = useState(founderInfo?.industry || "Tech / Software");
+  const [role, setRole] = useState(founderInfo?.role || "Founder & CEO");
+  const [experience, setExperience] = useState(founderInfo?.experience || "First-time Founder");
+
+  const displayName = name ? name.split(' ')[0] : "Founder";
 
   const handleNext = (e) => {
     e.preventDefault();
-    navigate('NEW_IDEA');
+    handleSaveFounderInfo({
+      name: name || user?.name || "Founder",
+      industry,
+      role,
+      experience
+    });
   };
 
   return (
     <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between' }}>
-      {/* Top Greeting matching Reference Screen 4 */}
+      {/* Top Greeting */}
       <div className="greeting-header">
-        Hello <strong>{userName}</strong>,
+        Hello <strong>{displayName}</strong>,
       </div>
 
-      {/* Center Card Input matching Reference Screen 4 */}
+      {/* Center Card Input */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '640px', margin: 'auto' }}>
         
-        <form onSubmit={handleNext} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '28px' }}>
+        <form onSubmit={handleNext} style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
           
-          {/* Main Gray Input Container matching Reference Screen 4 */}
+          {/* Founder Name Input if not present */}
+          <div style={{ backgroundColor: '#e6e6e6', borderRadius: '18px', padding: '18px 24px', width: '100%' }}>
+            <span style={{ fontSize: '13px', color: '#666666', display: 'block', marginBottom: '4px' }}>Your Name</span>
+            <input 
+              type="text" 
+              placeholder="e.g. Alex Vance"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{ background: 'transparent', border: 'none', outline: 'none', fontSize: '18px', fontWeight: '600', color: '#111111', width: '100%' }}
+              required
+            />
+          </div>
+
+          {/* Main Startup Description Container */}
           <div 
             style={{ 
               backgroundColor: '#e6e6e6', 
               borderRadius: '20px', 
-              padding: '36px 32px', 
+              padding: '32px', 
               width: '100%',
               display: 'flex',
               flexDirection: 'column',
-              gap: '16px'
+              gap: '12px'
             }}
           >
-            <label style={{ fontSize: '22px', fontWeight: '500', color: '#111111' }}>
+            <label style={{ fontSize: '20px', fontWeight: '500', color: '#111111' }}>
               Tell Us About Your Startup
             </label>
             <input 
               type="text"
               placeholder="e.g. Early-stage AI SaaS / EdTech / Consumer platform..."
-              value={founderInfo.industry}
-              onChange={(e) => setFounderInfo({...founderInfo, industry: e.target.value})}
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
               style={{
                 background: 'transparent',
                 border: 'none',
                 outline: 'none',
-                fontSize: '18px',
+                fontSize: '17px',
                 color: '#333333',
                 fontFamily: 'inherit',
                 width: '100%'
               }}
-              autoFocus
             />
           </div>
 
-          {/* Role / Experience fields in subtle style */}
+          {/* Role & Stage fields */}
           <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
-            <div style={{ flex: 1, backgroundColor: '#e6e6e6', borderRadius: '16px', padding: '18px 24px' }}>
+            <div style={{ flex: 1, backgroundColor: '#e6e6e6', borderRadius: '16px', padding: '16px 22px' }}>
               <span style={{ fontSize: '13px', color: '#666666', display: 'block', marginBottom: '4px' }}>Your Role</span>
               <input 
                 type="text" 
-                value={founderInfo.role}
-                onChange={(e) => setFounderInfo({...founderInfo, role: e.target.value})}
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
                 style={{ background: 'transparent', border: 'none', outline: 'none', fontSize: '16px', fontWeight: '600', color: '#111111', width: '100%' }}
               />
             </div>
 
-            <div style={{ flex: 1, backgroundColor: '#e6e6e6', borderRadius: '16px', padding: '18px 24px' }}>
+            <div style={{ flex: 1, backgroundColor: '#e6e6e6', borderRadius: '16px', padding: '16px 22px' }}>
               <span style={{ fontSize: '13px', color: '#666666', display: 'block', marginBottom: '4px' }}>Stage</span>
               <input 
                 type="text" 
-                value={founderInfo.experience}
-                onChange={(e) => setFounderInfo({...founderInfo, experience: e.target.value})}
+                value={experience}
+                onChange={(e) => setExperience(e.target.value)}
                 style={{ background: 'transparent', border: 'none', outline: 'none', fontSize: '16px', fontWeight: '600', color: '#111111', width: '100%' }}
               />
             </div>
@@ -83,7 +105,7 @@ export const FounderInfo = () => {
           <button 
             type="submit" 
             className="btn-primary"
-            style={{ marginTop: '12px', padding: '16px 40px', fontSize: '17px' }}
+            style={{ marginTop: '8px', padding: '16px 44px', fontSize: '17px' }}
           >
             <span>Next</span>
             <ArrowRight size={18} />
@@ -92,8 +114,9 @@ export const FounderInfo = () => {
 
       </div>
 
+      {/* Footer text: Only "Founder Profile" as requested */}
       <div style={{ textAlign: 'center', color: '#888888', fontSize: '13px', paddingBottom: '8px' }}>
-        Step 1 of 2 • Founder Profile
+        Founder Profile
       </div>
     </div>
   );

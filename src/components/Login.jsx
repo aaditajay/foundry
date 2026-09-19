@@ -13,12 +13,12 @@ export const Login = () => {
 
   return (
     <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between' }}>
-      {/* Top Greeting matching Reference Screen 3 */}
+      {/* Top Greeting */}
       <div className="greeting-header">
         Hello <strong>Founder</strong>,
       </div>
 
-      {/* Center Login Box matching Reference Screen 3 */}
+      {/* Center Login Box */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', margin: 'auto 0' }}>
         <h1 
           className="page-title" 
@@ -27,7 +27,7 @@ export const Login = () => {
           Login First. Tell Us Next.
         </h1>
 
-        {/* Google Login Button matching Reference Screen 3 */}
+        {/* Google Login Button */}
         <button
           onClick={onGoogleClick}
           disabled={loading}
@@ -74,7 +74,7 @@ export const Login = () => {
       </div>
 
       <div style={{ textAlign: 'center', color: '#888888', fontSize: '13px', paddingBottom: '8px' }}>
-        Firebase Authentication • Secure & Minimal
+        Foundry Authentication • Secure & Minimal
       </div>
     </div>
   );

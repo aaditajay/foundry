@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { Check, ArrowRight, GitMerge, RefreshCw, Zap } from 'lucide-react';
+import { Check, ArrowRight, GitMerge, Zap } from 'lucide-react';
 
 export const ConflictResolution = () => {
   const { currentStrategy, navigate } = useApp();
@@ -32,7 +32,7 @@ export const ConflictResolution = () => {
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
           <span style={{ fontSize: '12px', fontWeight: '800', color: '#888888', letterSpacing: '2px', textTransform: 'uppercase' }}>
-            FOUNDry Synthesis Engine • Step 6 of 7
+            Foundry Synthesis Engine • Step 6 of 7
           </span>
           <span style={{ fontSize: '13px', fontWeight: '700', color: '#10b981', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Zap size={14} /> Resolution Formulated
@@ -43,7 +43,7 @@ export const ConflictResolution = () => {
           Disagreement & Resolution Matrix
         </h1>
         <p style={{ color: '#666666', fontSize: '16px', marginBottom: '28px' }}>
-          FOUNDry balances competing agent priorities into a single optimized strategy.
+          Foundry balances competing agent priorities into a single optimized strategy.
         </p>
       </div>
 

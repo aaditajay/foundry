@@ -1,41 +1,50 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import FoundryLogo from './FoundryLogo';
 import { useApp } from '../context/AppContext';
 
-export const Splash = () => {
-  const { navigate } = useApp();
+export const Splash = ({ onComplete }) => {
+  const { transitionFromSplash } = useApp();
+  const [isSliding, setIsSliding] = useState(false);
+
+  const startTransition = () => {
+    if (isSliding) return;
+    setIsSliding(true);
+    setTimeout(() => {
+      if (onComplete) onComplete();
+      transitionFromSplash();
+    }, 750);
+  };
 
   useEffect(() => {
-    // Auto transition to landing after 2.8 seconds
+    // Auto transition after 2.5 seconds
     const timer = setTimeout(() => {
-      navigate('LANDING');
-    }, 2800);
+      startTransition();
+    }, 2500);
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, []);
 
   return (
     <div 
-      onClick={() => navigate('LANDING')}
-      style={{
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: '#161616',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-        position: 'relative'
-      }}
-      className="animate-fade-in"
+      onClick={startTransition}
+      className={`splash-container ${isSliding ? 'slide-left' : ''}`}
+      style={{ cursor: 'pointer' }}
     >
-      {/* Centered Logo matching Reference Image 1 */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '80px' }}>
+      {/* Moving Emblem matching requirement #4 */}
+      <div className={`splash-logo ${isSliding ? 'move-to-sidebar' : ''}`}>
         <FoundryLogo color="#FFFFFF" className="w-28 h-36" />
       </div>
 
-      {/* Line with dots at both ends matching exact reference image 1 */}
-      <div style={{ position: 'absolute', bottom: '120px', width: '560px', maxWidth: '80%' }}>
+      {/* Progress Line with endpoint dots */}
+      <div 
+        style={{ 
+          position: 'absolute', 
+          bottom: '120px', 
+          width: '560px', 
+          maxWidth: '80%',
+          opacity: isSliding ? 0 : 1,
+          transition: 'opacity 0.3s ease'
+        }}
+      >
         <div style={{ height: '1px', backgroundColor: '#555555', position: 'relative', width: '100%' }}>
           {/* Left Dot */}
           <div style={{
@@ -54,7 +63,7 @@ export const Splash = () => {
               height: '1px', 
               backgroundColor: '#ffffff', 
               width: '100%',
-              animation: 'fillProgress 2.6s ease-in-out forwards',
+              animation: 'fillProgress 2.4s ease-in-out forwards',
               transformOrigin: 'left'
             }} 
           />

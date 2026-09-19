@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import confetti from 'canvas-confetti';
-import { Download, Share2, PlusCircle, CheckCircle2, ArrowUpRight, FileText } from 'lucide-react';
+import { Download, PlusCircle, CheckCircle2, ArrowUpRight } from 'lucide-react';
 
 export const FinalStrategy = () => {
   const { currentStrategy, navigate, ideaInput } = useApp();
 
   useEffect(() => {
-    // Fire celebratory confetti on strategy reveal
     try {
       confetti({
         particleCount: 70,
@@ -73,7 +72,7 @@ export const FinalStrategy = () => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <span style={{ fontSize: '12px', fontWeight: '800', color: '#888888', letterSpacing: '2px', textTransform: 'uppercase' }}>
-              FOUNDry Strategy Output
+              Foundry Strategy Output
             </span>
             <h1 className="page-title" style={{ textAlign: 'left', fontSize: '42px', fontWeight: '800', marginTop: '4px', letterSpacing: '-1.5px' }}>
               Your Strategy Is Ready.

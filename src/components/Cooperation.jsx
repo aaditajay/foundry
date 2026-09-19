@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { AlertTriangle, ArrowRight, MessageSquare, ShieldAlert } from 'lucide-react';
+import { AlertTriangle, ArrowRight } from 'lucide-react';
 
 export const Cooperation = () => {
   const { currentStrategy, navigate } = useApp();
@@ -51,7 +51,7 @@ export const Cooperation = () => {
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
           <span style={{ fontSize: '12px', fontWeight: '800', color: '#888888', letterSpacing: '2px', textTransform: 'uppercase' }}>
-            FOUNDry Engine • Step 5 of 7
+            Foundry Engine • Step 5 of 7
           </span>
           <span style={{ fontSize: '13px', fontWeight: '600', color: '#111111' }}>
             Theme: Multi-Agent Cooperation
@@ -66,7 +66,7 @@ export const Cooperation = () => {
         </p>
       </div>
 
-      {/* Centerpiece Visual Tri-Agent Dialogue Grid */}
+      {/* Visual Tri-Agent Dialogue Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', position: 'relative' }}>
         
         {/* MARKET PERSPECTIVE CARD */}
@@ -182,7 +182,7 @@ export const Cooperation = () => {
 
       </div>
 
-      {/* CONFLICT DETECTED BANNER - Visual centerpiece matching prompt requirements */}
+      {/* CONFLICT DETECTED BANNER */}
       <div 
         style={{ 
           marginTop: '32px',

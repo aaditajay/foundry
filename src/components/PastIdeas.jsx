@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { PlusCircle, FileText, ArrowRight, Sparkles } from 'lucide-react';
+import { PlusCircle, ArrowRight } from 'lucide-react';
 import { generateStrategyData } from '../data/mockData';
 
 export const PastIdeas = () => {
@@ -120,7 +120,7 @@ export const PastIdeas = () => {
       </div>
 
       <div style={{ textAlign: 'center', color: '#888888', fontSize: '13px', paddingTop: '24px' }}>
-        FOUNDry Startup Strategy Archive
+        Foundry Startup Strategy Archive
       </div>
 
     </div>

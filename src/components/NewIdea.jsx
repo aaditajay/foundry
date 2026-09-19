@@ -1,11 +1,11 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { sampleIdeas } from '../data/mockData';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export const NewIdea = () => {
   const { 
     user, 
+    founderInfo,
     ideaInput, 
     setIdeaInput, 
     location, 
@@ -17,28 +17,23 @@ export const NewIdea = () => {
     handleForgeSubmit 
   } = useApp();
 
-  const userName = user?.name ? user.name.split(' ')[0] : "Founder";
+  // Show registered founder's name
+  const registeredName = user?.name || founderInfo?.name || "Founder";
+  const userName = registeredName.split(' ')[0];
 
   const onSubmit = (e) => {
     e.preventDefault();
     handleForgeSubmit();
   };
 
-  const fillSample = (sample) => {
-    setIdeaInput(sample.description);
-    setLocation(sample.location);
-    setBudget(sample.budget);
-    setAdditionalInfo(sample.additionalInfo);
-  };
-
   return (
     <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between', paddingBottom: '32px' }}>
-      {/* Top Greeting matching Reference Screen 5 */}
+      {/* Top Greeting showing registered founder's name */}
       <div className="greeting-header">
         Hello <strong>{userName}</strong>,
       </div>
 
-      {/* Main Idea Form matching Reference Screen 5 */}
+      {/* Main Idea Form */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '720px', margin: '0 auto' }}>
         
         <h1 className="page-title" style={{ fontSize: '38px', fontWeight: '800', marginBottom: '28px', letterSpacing: '-1px' }}>
@@ -47,8 +42,8 @@ export const NewIdea = () => {
 
         <form onSubmit={onSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '18px' }}>
           
-          {/* Large Main Box: "Describe your idea." matching Reference Screen 5 */}
-          <div style={{ backgroundColor: '#e6e6e6', borderRadius: '20px', padding: '24px 28px', minHeight: '140px' }}>
+          {/* Large Main Box: "Describe your idea." */}
+          <div style={{ backgroundColor: '#e6e6e6', borderRadius: '20px', padding: '24px 28px', minHeight: '150px' }}>
             <textarea
               placeholder="Describe your idea."
               value={ideaInput}
@@ -70,7 +65,7 @@ export const NewIdea = () => {
             />
           </div>
 
-          {/* Two Side-by-Side Boxes: "Location" & "Budget(If Needed)" matching Reference Screen 5 */}
+          {/* Two Side-by-Side Boxes: "Location" & "Budget(If Needed)" */}
           <div style={{ display: 'flex', gap: '18px' }}>
             <div style={{ flex: 1, backgroundColor: '#e6e6e6', borderRadius: '18px', padding: '18px 24px' }}>
               <input
@@ -109,7 +104,7 @@ export const NewIdea = () => {
             </div>
           </div>
 
-          {/* Bottom Box: "Anything else to know about" matching Reference Screen 5 */}
+          {/* Bottom Box: "Anything else to know about" */}
           <div style={{ backgroundColor: '#e6e6e6', borderRadius: '18px', padding: '18px 24px' }}>
             <input
               type="text"
@@ -128,37 +123,8 @@ export const NewIdea = () => {
             />
           </div>
 
-          {/* Quick Demo Sample Fillers for Hackathon Presentation */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '6px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '12px', fontWeight: '600', color: '#777777', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              Sample Demo Ideas:
-            </span>
-            {sampleIdeas.map((s, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => fillSample(s)}
-                style={{
-                  background: '#f0f0f0',
-                  border: '1px solid #dcdcdc',
-                  borderRadius: '100px',
-                  padding: '6px 14px',
-                  fontSize: '12px',
-                  fontWeight: '600',
-                  color: '#333333',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e2e2e2'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f0f0f0'}
-              >
-                💡 {s.title.split('—')[0]}
-              </button>
-            ))}
-          </div>
-
-          {/* Primary CTA: "Forge" matching Reference Screen 5 */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+          {/* Primary CTA: "Forge" */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
             <button 
               type="submit" 
               className="btn-primary"
@@ -173,8 +139,9 @@ export const NewIdea = () => {
 
       </div>
 
+      {/* Bottom text updated to "Foundry" */}
       <div style={{ textAlign: 'center', color: '#888888', fontSize: '13px', paddingTop: '16px' }}>
-        FOUNDry Multi-Agent Engine • Ready to analyze
+        Foundry Multi-Agent Engine • Ready to analyze
       </div>
     </div>
   );
