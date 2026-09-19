@@ -65,7 +65,7 @@ export const FinalStrategy = () => {
   };
 
   return (
-    <div className="main-canvas animate-fade-in" style={{ paddingBottom: '60px' }}>
+    <div className="page-content animate-fade-in" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', paddingBottom: '60px' }}>
       
       {/* Header & Export Actions */}
       <div style={{ borderBottom: '1px solid #e0e0e0', paddingBottom: '24px', marginBottom: '36px' }}>

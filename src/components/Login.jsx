@@ -39,7 +39,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between', padding: '40px 64px' }}>
+    <div className="page-content animate-fade-in" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       {/* Top Greeting */}
       <div className="greeting-header">
         Hello <strong>Founder</strong>,
@@ -191,7 +191,7 @@ export const Login = () => {
             </button>
           </form>
 
-          {/* Clean Solid Divider Line (Fixed ugly dashed boxes) */}
+          {/* Clean Solid Divider Line */}
           <div style={{ display: 'flex', alignItems: 'center', width: '100%', margin: '22px 0' }}>
             <div style={{ flex: 1, height: '1px', backgroundColor: '#e2e8f0' }} />
             <span style={{ fontSize: '12px', color: '#64748b', padding: '0 14px', fontWeight: '500', whiteSpace: 'nowrap' }}>
@@ -200,7 +200,7 @@ export const Login = () => {
             <div style={{ flex: 1, height: '1px', backgroundColor: '#e2e8f0' }} />
           </div>
 
-          {/* Lengthier Google Sign In Button with Icon & Text */}
+          {/* Lengthier Google Sign In Button */}
           <button
             type="button"
             onClick={onGoogleClick}

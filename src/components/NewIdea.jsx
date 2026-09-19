@@ -17,19 +17,15 @@ export const NewIdea = () => {
     handleForgeSubmit 
   } = useApp();
 
-  // Show registered founder's name
   const registeredName = user?.name || founderInfo?.name || "Founder";
   const userName = registeredName.split(' ')[0];
 
-  // Voice recording state
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef(null);
 
-  // File upload state
   const [attachedFile, setAttachedFile] = useState(null);
   const fileInputRef = useRef(null);
 
-  // Voice to Text handler with Fix #3 (interimResults = false & isFinal check)
   const toggleVoiceToText = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -46,7 +42,7 @@ export const NewIdea = () => {
       try {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
-        recognition.interimResults = false; // Fix: prevent duplicate interim results
+        recognition.interimResults = false;
         recognition.lang = 'en-US';
 
         recognition.onstart = () => setIsRecording(true);
@@ -80,7 +76,6 @@ export const NewIdea = () => {
     }
   };
 
-  // File upload handler
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -123,7 +118,7 @@ export const NewIdea = () => {
   };
 
   return (
-    <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between', paddingBottom: '32px' }}>
+    <div className="page-content animate-fade-in" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingBottom: '32px' }}>
       {/* Top Greeting */}
       <div className="greeting-header">
         Hello <strong>{userName}</strong>,
@@ -138,7 +133,7 @@ export const NewIdea = () => {
 
         <form onSubmit={onSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '18px' }}>
           
-          {/* Large Main Box with Top Right 🎤 & Bottom Right 📎 Icons */}
+          {/* Large Main Box */}
           <div 
             style={{ 
               backgroundColor: '#e6e6e6', 
@@ -177,7 +172,7 @@ export const NewIdea = () => {
               {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
             </button>
 
-            {/* Native Textarea with Placeholder (Fixed Fix #4: No overlapping text) */}
+            {/* Native Textarea */}
             <textarea
               placeholder="Describe your idea."
               value={ideaInput}
@@ -200,7 +195,7 @@ export const NewIdea = () => {
               autoFocus
             />
 
-            {/* Attached File Badge preview */}
+            {/* Attached File Badge */}
             {attachedFile && (
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#ffffff', padding: '6px 12px', borderRadius: '100px', fontSize: '13px', width: 'fit-content', marginBottom: '8px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                 <FileText size={14} style={{ color: '#111111' }} />
@@ -246,7 +241,7 @@ export const NewIdea = () => {
 
           </div>
 
-          {/* Two Side-by-Side Boxes: "Location" & "Budget(If Needed)" */}
+          {/* Two Side-by-Side Boxes */}
           <div style={{ display: 'flex', gap: '18px' }}>
             <div style={{ flex: 1, backgroundColor: '#e6e6e6', borderRadius: '18px', padding: '18px 24px' }}>
               <input
@@ -285,7 +280,7 @@ export const NewIdea = () => {
             </div>
           </div>
 
-          {/* Bottom Box: "Anything else to know about" */}
+          {/* Bottom Box */}
           <div style={{ backgroundColor: '#e6e6e6', borderRadius: '18px', padding: '18px 24px' }}>
             <input
               type="text"
@@ -304,7 +299,7 @@ export const NewIdea = () => {
             />
           </div>
 
-          {/* Primary CTA: "Forge" */}
+          {/* Primary CTA */}
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
             <button 
               type="submit" 

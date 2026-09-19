@@ -45,7 +45,7 @@ export const Cooperation = () => {
   ];
 
   return (
-    <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between', paddingBottom: '32px' }}>
+    <div className="page-content animate-fade-in" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingBottom: '32px' }}>
       
       {/* Header */}
       <div>

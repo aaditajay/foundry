@@ -5,13 +5,13 @@ export const Landing = () => {
   const { navigate, user } = useApp();
 
   return (
-    <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between', padding: '48px 64px' }}>
-      {/* Top Greeting matching Reference Image 2 */}
+    <div className="page-content animate-fade-in" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      {/* Top Greeting */}
       <div className="greeting-header" style={{ fontSize: '42px' }}>
         Hello <strong style={{ fontWeight: '800' }}>Founder</strong>,
       </div>
 
-      {/* Center Content matching Reference Image 2 */}
+      {/* Center Content */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', margin: 'auto 0' }}>
         
         <h1 
@@ -25,7 +25,7 @@ export const Landing = () => {
           Market. Product. Finance.
         </p>
 
-        {/* Forge CTA Pill Button matching Reference Image 2 */}
+        {/* Forge CTA Pill Button */}
         <button 
           onClick={() => navigate(user ? 'NEW_IDEA' : 'LOGIN')}
           style={{
@@ -54,7 +54,6 @@ export const Landing = () => {
         </button>
       </div>
 
-      {/* Subtle bottom spacer for balanced whitespace */}
       <div style={{ height: '24px' }} />
     </div>
   );

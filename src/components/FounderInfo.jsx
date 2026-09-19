@@ -174,7 +174,7 @@ Use concise, factual statements based only on my answers.`;
   };
 
   return (
-    <div className="main-canvas animate-fade-in" style={{ justifyContent: 'space-between', paddingBottom: '32px' }}>
+    <div className="page-content animate-fade-in" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingBottom: '32px' }}>
       {/* Top Greeting */}
       <div className="greeting-header">
         Hello <strong>{displayName}</strong>,
@@ -373,7 +373,7 @@ Use concise, factual statements based only on my answers.`;
         Founder Profile
       </div>
 
-      {/* PROMPT MODAL DIALOG BOX (PERFECTLY DEAD-CENTER ALIGNED) */}
+      {/* PROMPT MODAL DIALOG BOX */}
       {showPromptModal && (
         <div 
           style={{
