@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
-import Sidebar from './components/Sidebar';
+import SidebarNav from './components/SidebarNav';
 import Navbar from './components/Navbar';
 import FoundryLogo from './components/FoundryLogo';
 import Landing from './components/Landing';
@@ -71,12 +71,16 @@ const MainContent = () => {
   return (
     <div className="app-container" onClick={isIntroMode ? startIntroTransition : undefined}>
       
-      {/* Dark Left Sidebar (Expands to 100vw on Splash, shrinks to 260px on transition) */}
+      {/* Dark Left Sidebar */}
       <div 
         className={`sidebar ${isIntroMode && introPhase === 'SPLASH_CENTER' ? 'full-splash' : ''}`}
         style={{
           width: isIntroMode ? (introPhase === 'SPLASH_CENTER' ? '100vw' : '260px') : '260px',
-          minWidth: isIntroMode ? (introPhase === 'SPLASH_CENTER' ? '100vw' : '260px') : '260px'
+          minWidth: isIntroMode ? (introPhase === 'SPLASH_CENTER' ? '100vw' : '260px') : '260px',
+          display: 'flex',
+          flexDirection: 'column',
+          justify: 'space-between',
+          padding: '32px 24px'
         }}
       >
         {/* Top Brand Header */}
@@ -97,15 +101,26 @@ const MainContent = () => {
             className={`intro-logo-wrapper ${introPhase === 'READY' || introPhase === 'SPLASH_TRANSITIONING' ? 'in-sidebar' : ''}`}
             style={{
               position: 'fixed',
-              top: '50%',
+              top: isIntroMode && introPhase === 'SPLASH_CENTER' ? '50%' : '38%',
               left: isIntroMode ? (introPhase === 'SPLASH_CENTER' ? '50vw' : '130px') : '130px',
               transform: 'translate(-50%, -50%)',
-              transition: 'left 0.85s cubic-bezier(0.77, 0, 0.175, 1)',
+              transition: 'all 0.85s cubic-bezier(0.77, 0, 0.175, 1)',
               zIndex: 100
             }}
           >
             <FoundryLogo color="#FFFFFF" className="w-24 h-32" />
           </div>
+        </div>
+
+        {/* Bottom Navigation Links below logo */}
+        <div 
+          style={{ 
+            opacity: introPhase === 'SPLASH_CENTER' ? 0 : 1, 
+            transition: 'opacity 0.6s ease 0.3s',
+            pointerEvents: introPhase === 'SPLASH_CENTER' ? 'none' : 'auto'
+          }}
+        >
+          <SidebarNav />
         </div>
 
         {/* Splash Progress Line with dots */}
@@ -123,7 +138,7 @@ const MainContent = () => {
       {/* Navbar overlay */}
       {!isIntroMode && <Navbar />}
 
-      {/* Main Canvas (White panel sliding in from right attached to contracting black screen) */}
+      {/* Main Canvas */}
       <div 
         className="main-canvas"
         style={{
